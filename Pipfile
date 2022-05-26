@@ -9,10 +9,9 @@ pandas = "*"
 matplotlib = "*"
 ipykernel = "*"
 jupyter = "*"
-requests = "*"
-xmltodict = "*"
 scipy = "*"
 statsmodels = "*"
+sklearn = "*"
 
 [dev-packages]
 
