@@ -12,6 +12,7 @@ jupyter = "*"
 requests = "*"
 xmltodict = "*"
 scipy = "*"
+statsmodels = "*"
 
 [dev-packages]
 
