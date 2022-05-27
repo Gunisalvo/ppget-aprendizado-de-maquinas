@@ -11,7 +11,7 @@
 $ pipenv install
 [...]
 $ pipenv shell
-(ppget-aprendizado-de-maquinas) $ python -m ipykernel install --user --name=ucd-cm
+(ppget-aprendizado-de-maquinas) $ python -m ipykernel install --user --name=ppget-aprendizado-de-maquinas
 (ppget-aprendizado-de-maquinas) $ jupyter notebook
 ```
 This should open your browser in the root of the project. Double-click on `demand_response.ipynb` to run the notebook
