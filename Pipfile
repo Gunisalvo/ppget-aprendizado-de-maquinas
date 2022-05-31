@@ -12,6 +12,7 @@ jupyter = "*"
 scipy = "*"
 statsmodels = "*"
 sklearn = "*"
+tensorflow = "*"
 
 [dev-packages]
 
