@@ -45,5 +45,6 @@ class ModelSource:
         return self.__datasource
 
     @staticmethod
-    def load(start_date, end_date, feature, frequency="1H", path="./data/household_power_consumption.txt", cleaning_backfill=1):
+    def load(start_date, end_date, feature,
+             frequency="10min", path="./data/household_power_consumption.txt", cleaning_backfill=1):
         return ModelSource(start_date, end_date, feature, frequency, path, cleaning_backfill)
