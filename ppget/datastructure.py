@@ -28,7 +28,7 @@ class DatasetBuilder:
 
     __scaler = MinMaxScaler(feature_range=(0, 1))
 
-    def __init__(self, X, window_size=48, lag=1, data_split=TrainSplit(0.9), normalised=True):
+    def __init__(self, X, window_size=48, all_features=False, data_split=TrainSplit(0.9), normalised=True):
         self.data_split = data_split
 
         if normalised:
@@ -36,18 +36,27 @@ class DatasetBuilder:
             self.__normaliser = self.__scaler.fit(values)
             self.__original_frame = self.__normaliser.transform(values).flatten()
         else:
-            self.__original_frame = X
+            self.__original_frame = X.to_numpy()
 
         vector_frame = self.__original_frame
         X = []
         y = []
-        for i in range(len(vector_frame) - window_size):
-            row = [[a] for a in vector_frame[i:i + window_size]]
-            X.append(row)
-            label = vector_frame[i + window_size]
-            y.append(label)
-        self.X = np.array(X)
-        self.y = np.array(y)
+        if all_features:
+            for i in range(len(vector_frame) - window_size):
+                row = [r for r in vector_frame[i:i + window_size]]
+                X.append(row)
+                label = vector_frame[i + window_size][0]
+                y.append(label)
+            self.X = np.array(X)
+            self.y = np.array(y)
+        else:
+            for i in range(len(vector_frame) - window_size):
+                row = [[a] for a in vector_frame[i:i + window_size]]
+                X.append(row)
+                label = vector_frame[i + window_size]
+                y.append(label)
+            self.X = np.array(X)
+            self.y = np.array(y)
 
     def build_splits(self):
         return self.data_split.split(self.X, self.y)
