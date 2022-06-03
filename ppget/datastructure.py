@@ -4,22 +4,18 @@ from sklearn.preprocessing import MinMaxScaler
 
 class TrainSplit:
 
-    def __init__(self, train, validation=0.0):
+    def __init__(self, train=0.9):
         self.train = train
-        self.validation = validation
 
     def split(self, X, y):
         l = len(X)
         b1 = int(l * self.train)
-        b2 = int(b1 + (l * self.validation))
 
         X_train, y_train = X[:b1], y[:b1]
-        X_val, y_val = X[b1:b2], y[b1:b2]
-        X_test, y_test = X[b2:], y[b2:]
+        X_test, y_test = X[b1:], y[b1:]
 
         return {
             "training": {"X": X_train, "y": y_train},
-            "validation": {"X": X_val, "y": y_val},
             "test": {"X": X_test, "y": y_test}
         }
 
