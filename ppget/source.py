@@ -1,4 +1,6 @@
 import pandas as pd
+import shutil
+import os
 
 
 class ModelSource:
@@ -38,6 +40,9 @@ class ModelSource:
         data = data.set_index("timestamp")
         self.__datasource = seasonal_fill(clean_data(data))
 
+    def seasonal_replace_days(self, dates):
+        pass
+
     def missing_data(self):
         return self.__datasource[self.__datasource.isnull()]
 
@@ -48,3 +53,11 @@ class ModelSource:
     def load(start_date, end_date, feature,
              frequency="10min", path="./data/household_power_consumption.txt", cleaning_backfill=1):
         return ModelSource(start_date, end_date, feature, frequency, path, cleaning_backfill)
+
+
+def prepare_filesystem(model):
+    try:
+        shutil.rmtree(model)
+    except Exception as ex:
+        print(f"prepare_filesystem: ignoring - {ex}")
+    os.makedirs(f"{os.getcwd()}/{model}cluster")
