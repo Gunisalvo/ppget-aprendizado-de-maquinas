@@ -69,3 +69,7 @@ class Model:
 
     def describe(self):
         self.model.summary()
+
+    @staticmethod
+    def baseline(data):
+        return list(map(lambda x: x[-2][0], data))
