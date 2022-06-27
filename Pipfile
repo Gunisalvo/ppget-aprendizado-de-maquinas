@@ -14,6 +14,7 @@ statsmodels = "*"
 sklearn = "*"
 tensorflow = "*"
 pmdarima = "*"
+seaborn = "*"
 
 [dev-packages]
 
