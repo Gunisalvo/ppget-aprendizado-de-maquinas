@@ -6,8 +6,16 @@ from keras.optimizers import Adam
 from keras.callbacks import EarlyStopping, ModelCheckpoint
 
 
+def __FFNN(model, neurons, dropout):
+    model.add(Dense(neurons, 'relu'))
+    model.add(Flatten())
+    model.add(Dropout(dropout))
+    model.add(Dense(neurons, 'relu'))
+    model.add(Dense(1, 'linear'))
+
+
 def __CNN1D(model, neurons, dropout):
-    model.add(Conv1D(neurons, kernel_size=4, activation="relu"))
+    model.add(Conv1D(neurons, kernel_size=2, activation="relu"))
     model.add(Dropout(dropout))
     model.add(Flatten())
     model.add(Dense(neurons, "relu"))
@@ -28,6 +36,7 @@ def __GRU(model, neurons, dropout):
 
 
 MODEL_STRUCTURE = {
+    "ffnn": __FFNN,
     "cnn1d": __CNN1D,
     "lstm": __LSTM,
     "gru": __GRU
