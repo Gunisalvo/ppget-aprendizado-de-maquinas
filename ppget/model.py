@@ -1,5 +1,4 @@
 import os
-import numpy as np
 from keras.layers import Dense, Dropout, Conv1D, Flatten, InputLayer, LSTM, GRU
 from keras.models import Sequential
 from keras.optimizers import Adam
@@ -10,29 +9,25 @@ def __FFNN(model, neurons, dropout):
     model.add(Dense(neurons, 'relu'))
     model.add(Flatten())
     model.add(Dropout(dropout))
-    model.add(Dense(neurons, 'relu'))
-    model.add(Dense(1, 'linear'))
+    model.add(Dense(13, 'linear'))
 
 
 def __CNN1D(model, neurons, dropout):
     model.add(Conv1D(neurons, kernel_size=2, activation="relu"))
-    model.add(Dropout(dropout))
     model.add(Flatten())
-    model.add(Dense(neurons, "relu"))
-    model.add(Dense(1, "linear"))
+    model.add(Dropout(dropout))
+    model.add(Dense(13, "linear"))
 
 
 def __LSTM(model, neurons, dropout):
     model.add(LSTM(neurons, return_sequences=False, dropout=dropout))
-    model.add(Dense(neurons, 'relu'))
-    model.add(Dense(1, 'linear'))
+    model.add(Dense(13, 'linear'))
 
 
 def __GRU(model, neurons, dropout):
     model.add(GRU(neurons))
     model.add(Dropout(dropout))
-    model.add(Dense(neurons, 'relu'))
-    model.add(Dense(1, 'linear'))
+    model.add(Dense(13, 'linear'))
 
 
 MODEL_STRUCTURE = {
@@ -45,7 +40,7 @@ MODEL_STRUCTURE = {
 
 class Model:
 
-    def __init__(self, name, model_type, window, neurons=8, dropout=0.02, patience=4, monitor="val_loss"):
+    def __init__(self, name, model_type, window, neurons=4, dropout=0.02, patience=4, monitor="val_loss"):
 
         self.model = Sequential()
         self.model.add(InputLayer((window - 1, 1)))
@@ -58,10 +53,10 @@ class Model:
             ModelCheckpoint(filepath=model_file_name, monitor=monitor, save_best_only=True)
         ]
 
-    def compile(self, learning_rate=0.0001, loss_function="mse"):
-        self.model.compile(loss=loss_function, optimizer=Adam(learning_rate=learning_rate, amsgrad=True))
+    def compile(self, loss_function="mse"):
+        self.model.compile(loss=loss_function, optimizer=Adam(amsgrad=True))
 
-    def fit(self, X, y, batch_size=64, validation_split=0.2, epochs=100):
+    def fit(self, X, y, batch_size=16, validation_split=0.2, epochs=100):
         self.model.fit(
             X,
             y,
@@ -72,13 +67,7 @@ class Model:
         )
 
     def predict(self, data):
-        predicted = self.model.predict(data)
-        predicted = np.reshape(predicted, (predicted.size,))
-        return predicted
+        return self.model.predict(data)
 
     def describe(self):
         self.model.summary()
-
-    @staticmethod
-    def baseline(data):
-        return list(map(lambda x: x[-2][0], data))
