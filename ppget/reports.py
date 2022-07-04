@@ -55,6 +55,24 @@ def report_best_case(X_test, y_test, predictions, model_type, render=True):
     return best_case, mse_baseline, mse_model, p_value
 
 
+def report_test_issue(X_test, y_test, predictions, model_type, render=True):
+    best_case = 0
+    best_error = np.Infinity
+    best_difference = np.Infinity
+
+    for case in range(len(X_test)):
+        b_error, m_error, p_value = report_case(X_test, y_test, predictions, model_type, case, render=False)
+        if m_error < best_error and p_value < 0.05:
+            if abs(b_error - m_error) < best_difference:
+                best_case = case
+                best_error = b_error
+                best_difference = abs(b_error - m_error)
+
+    mse_baseline, mse_model, p_value = report_case(X_test, y_test, predictions, model_type, best_case, render=render)
+
+    return best_case, mse_baseline, mse_model, p_value
+
+
 def report_results(expected, predicted, model=None, window=None, range_limit=None, render=True):
     e = list(map(lambda x: np.mean(x), expected))
     p = list(map(lambda x: np.mean(x), predicted))
