@@ -1,8 +1,11 @@
+import os
+
 import matplotlib.pyplot as plt
 import numpy as np
 from sklearn.metrics import mean_squared_error, r2_score
 from scipy.stats import ttest_ind
 from pathlib import Path
+import tensorflow as tf
 
 
 def report_case(X_test, y_test, predictions, model, case, render=True):
@@ -95,5 +98,14 @@ def report_results(expected, predicted, model=None, window=None, range_limit=Non
     return r2_score(e, p)
 
 
-def report_model_size(model_path):
-    return sum(file.stat().st_size for file in Path(model_path).rglob('*')) if model_path else 0
+def report_model_size(model_path, skip_embedded=False):
+    open('/tmp/model.tflite', 'w').close()
+
+    if not skip_embedded:
+        converter = tf.lite.TFLiteConverter.from_saved_model(model_path)
+        embedded_model = converter.convert()
+        with open('/tmp/model.tflite', 'wb') as f:
+            f.write(embedded_model)
+
+    return sum(file.stat().st_size for file in Path(model_path).rglob('*')) if model_path else 0, \
+           Path('/tmp/model.tflite').stat().st_size if model_path else 0

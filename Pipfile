@@ -15,6 +15,7 @@ sklearn = "*"
 tensorflow = "*"
 pmdarima = "*"
 seaborn = "*"
+flask = "*"
 
 [dev-packages]
 
